@@ -11,26 +11,51 @@ from video_sim_pipeline import (
 
 st.set_page_config(page_title="Batch Simulasi Video", page_icon="🎬", layout="wide")
 st.title("🎬 Pemantau Batch Simulasi Video")
-st.caption("Unggah satu video asli, atur daftar skenario, dan pantau progres tiap skenario.")
+st.caption("Unggah satu video asli, atur daftar skenario & arah kamera, lalu pantau progres tiap skenario.")
 
 st.session_state.setdefault("sim_results", [])
 
 default_scenarios_json = json.dumps(
     [
         {
-            "name": "sim_hujan_malam",
-            "description": "Malam hari dengan visibilitas lebih rendah",
-            "parameters": {"waktu": "malam", "cuaca": "hujan_deras", "visibilitas": 0.45},
+            "name": "cam_pan_kiri_kanan",
+            "description": "Kamera bergeser perlahan dari kiri ke kanan frame",
+            "parameters": {
+                "arah_kamera": "pan_kiri_kanan",
+                "durasi_detik": 6,
+                "lebar": 640,
+                "tinggi": 360,
+                "visibilitas": 1.0,
+                "intensitas_efek": 0.2,
+                "tampilkan_hud": True,
+            },
         },
         {
-            "name": "sim_siang_terik",
-            "description": "Siang hari dengan kontras jelas",
-            "parameters": {"waktu": "siang", "cuaca": "cerah_terik", "visibilitas": 1.0},
+            "name": "cam_tilt_atas_bawah",
+            "description": "Kamera mengarah dari bagian atas ke bagian bawah adegan",
+            "parameters": {
+                "arah_kamera": "tilt_atas_bawah",
+                "durasi_detik": 6,
+                "lebar": 640,
+                "tinggi": 360,
+                "visibilitas": 0.9,
+                "intensitas_efek": 0.25,
+                "tampilkan_hud": True,
+            },
         },
         {
-            "name": "sim_kabut_pagi",
-            "description": "Pagi berkabut dengan visibilitas menengah",
-            "parameters": {"waktu": "pagi", "cuaca": "kabut", "visibilitas": 0.65},
+            "name": "cam_zoom_tengah_malam",
+            "description": "Fokus ke area tengah dengan nuansa malam dan visibilitas lebih rendah",
+            "parameters": {
+                "arah_kamera": "zoom_tengah",
+                "waktu": "malam",
+                "tint": "dingin",
+                "lebar": 640,
+                "tinggi": 360,
+                "visibilitas": 0.5,
+                "intensitas_efek": 0.65,
+                "tampilkan_hud": True,
+            },
         },
     ],
     indent=2,
@@ -38,7 +63,7 @@ default_scenarios_json = json.dumps(
 )
 
 uploaded_video = st.file_uploader("Pilih Video Asli (.mp4)", type=["mp4", "mov", "mkv"])
-scenarios_raw = st.text_area("Daftar Skenario (JSON)", value=default_scenarios_json, height=240)
+scenarios_raw = st.text_area("Daftar Skenario (JSON)", value=default_scenarios_json, height=280)
 
 mulai_btn = st.button("🚀 Jalankan Batch Simulasi", type="primary", use_container_width=True)
 
